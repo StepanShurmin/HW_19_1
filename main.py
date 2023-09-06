@@ -1,11 +1,15 @@
+import os
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from urllib.parse import urlparse, parse_qs
 
 import requests
+from dotenv import load_dotenv
 
+load_dotenv()
 # Для начала определим настройки запуска
-hostName = "localhost"  # Адрес для доступа по сети
-serverPort = 8080  # Порт для доступа по сети
+hostName = os.getenv("HOSTNAME")  # Адрес для доступа по сети
+serverPort = int(os.getenv("PORT"))  # Порт для доступа по сети
+url = os.getenv("URL")
 
 
 class MyServer(BaseHTTPRequestHandler):
@@ -15,11 +19,8 @@ class MyServer(BaseHTTPRequestHandler):
     """
 
     def get_html_content(self):
-        response = requests.get('https://raw.githubusercontent.com/StepanShurmin/HW_19_1/develop/index.html')
+        response = requests.get(url)
         return response.text
-
-    # with open('index.html', 'r', encoding='utf-8') as file:
-    #     return file.read()
 
     def do_GET(self):
         """ Метод для обработки входящих GET-запросов """
